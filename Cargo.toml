@@ -2,7 +2,7 @@
 authors = ["JN.X <xyanyue@gmail.com>"]
 description = "Randomly generating potentially false UserAgent,used by spider<Initial version>"
 edition = "2021"
-license = "BSD"
+license = "BSD-3-Clause"
 name = "rand_user_agent"
 version = "0.0.1"
 
