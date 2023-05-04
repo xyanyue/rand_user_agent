@@ -2,9 +2,12 @@
 authors = ["JN.X <xyanyue@gmail.com>"]
 description = "Randomly generating potentially false UserAgent,used by spider<Initial version>"
 edition = "2021"
+keywords = ["agent", "random", "useragent", "user_agent", "rand"]
 license = "BSD-3-Clause"
 name = "rand_user_agent"
-version = "0.0.1"
+readme = "README.md"
+repository = "https://github.com/xyanyue/rand_user_agent.git"
+version = "0.0.2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
