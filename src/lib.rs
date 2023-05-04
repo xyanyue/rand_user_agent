@@ -48,8 +48,6 @@ mod os_version;
 
 use std::fmt::Display;
 
-use rand::Rng;
-
 use crate::{browser::Browser, os_version::OS};
 
 enum Product {
@@ -129,7 +127,7 @@ impl UserAgent {
 mod tests {
 
     use super::*;
-
+    use rand::Rng;
     #[test]
     fn it_works() {
         for _ in 0..100 {
