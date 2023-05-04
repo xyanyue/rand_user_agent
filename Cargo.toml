@@ -1,12 +1,10 @@
 [package]
 authors = ["JN.X <xyanyue@gmail.com>"]
 description = "Randomly generating potentially false UserAgent,used by spider<Initial version>"
-documentation = "https://docs.rs/rand_user_agent/0.1.0"
 edition = "2021"
 keywords = ["agent", "random", "useragent", "user_agent", "rand"]
 license = "BSD-3-Clause"
 name = "rand_user_agent"
-readme = "README.md"
 repository = "https://github.com/xyanyue/rand_user_agent.git"
 version = "0.1.0"
 

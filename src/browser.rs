@@ -28,7 +28,7 @@ impl Distribution<Browser> for Standard {
     }
 }
 
-const AppleWebKit: [&str; 2] = [
+const APPLE_WEB_KIT: [&str; 2] = [
     "AppleWebKit/537.36 (KHTML, like Gecko)",
     "AppleWebKit/605.1.15 (KHTML, like Gecko)",
 ];
@@ -55,7 +55,7 @@ impl Display for Browser {
             Browser::Chrome => write!(
                 f,
                 "{} Chrome/{}.0.{}.{}",
-                AppleWebKit[0],
+                APPLE_WEB_KIT[0],
                 rng.gen_range(100..110),
                 rng.gen_range(1000..5060),
                 rng.gen_range(10..90)
@@ -63,7 +63,7 @@ impl Display for Browser {
             Browser::Opera => write!(
                 f,
                 "{} {}",
-                AppleWebKit[0],
+                APPLE_WEB_KIT[0],
                 OPERA[rng.gen_range(0..OPERA.len())]
             ),
             Browser::Firefox => {
@@ -73,7 +73,7 @@ impl Display for Browser {
             Browser::Safari => write!(
                 f,
                 "{} Safari/{}.{}.{}",
-                AppleWebKit[0],
+                APPLE_WEB_KIT[0],
                 rng.gen_range(400..500),
                 rng.gen_range(20..80),
                 rng.gen_range(10..90),
@@ -82,7 +82,7 @@ impl Display for Browser {
             Browser::Edge => write!(
                 f,
                 "{} {}",
-                AppleWebKit[0],
+                APPLE_WEB_KIT[0],
                 EDGE[rng.gen_range(0..EDGE.len())]
             ),
         }

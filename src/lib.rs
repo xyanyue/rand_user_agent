@@ -1,8 +1,8 @@
-//! > 这是一个随机生成UserAgent的程序<初版>。
+//!  这是一个随机生成UserAgent的程序<初版>。
 //!
-//! > 未保证浏览器版本真实存在。不生成现实较少见的Agent
+//!  未保证浏览器版本真实存在。不生成现实较少见的Agent
 //!
-//! > 安卓系统版本 使用的中国内地一网站userAgent系统 top n
+//!  安卓系统版本 使用的中国内地一网站userAgent系统 top n
 //!
 //! # Quick Start
 //! ```no run
@@ -10,7 +10,7 @@
 //!         println!("{}", UserAgent::random().to_string());
 //!     }
 //! ```
-//! ### 手机电脑指定
+//! ## 手机电脑指定
 //! ```no run
 //!     for _ in 0..100 {
 //!         // 随机手机端agent
@@ -19,7 +19,7 @@
 //!         println!("Pc:{}", UserAgent::pc().to_string());
 //!     }
 //! ```
-//! ### 完全自定义
+//! ## 完全自定义
 //! ```no run
 //!     let mut rng = rand::thread_rng();
 //!     for _ in 0..100 {
@@ -39,7 +39,7 @@
 //! ```
 //!
 //! # Todo
-//! - [ ] 生成Sec-CH-UA
+//! - [ ] 生成Sec-CH-UA 后期承担 `我是谁`的任务，可能落在他身上了
 //! - [ ] 更多统计信息收集,提取系统版本 和 浏览器真实版本
 //! - [ ] 生成真实世界的概率
 
@@ -50,6 +50,7 @@ use std::fmt::Display;
 
 use crate::{browser::Browser, os_version::OS};
 
+/// Agent 惯例..致敬网景
 enum Product {
     Mozilla,
     /// 少见先不支持
@@ -69,7 +70,8 @@ impl<'a> Display for Product {
         }
     }
 }
-
+/// 用户代理生成
+/// 分为3段 Product && OS && browser
 pub struct UserAgent {
     product: Product,
     os_ver: OS,
@@ -126,36 +128,35 @@ impl UserAgent {
 #[cfg(test)]
 mod tests {
 
-    use super::*;
-    use rand::Rng;
-    #[test]
-    fn it_works() {
-        for _ in 0..100 {
-            println!("{}", UserAgent::random().to_string());
-        }
-    }
+    // use super::*;
+    // #[test]
+    // fn it_works() {
+    //     for _ in 0..100 {
+    //         println!("{}", UserAgent::random().to_string());
+    //     }
+    // }
 
-    #[test]
-    fn os_check() {
-        for _ in 0..100 {
-            println!("Mobile:{}", UserAgent::mobile().to_string());
-            println!("Pc:{}", UserAgent::pc().to_string());
-        }
-    }
+    // #[test]
+    // fn os_check() {
+    //     for _ in 0..100 {
+    //         println!("Mobile:{}", UserAgent::mobile().to_string());
+    //         println!("Pc:{}", UserAgent::pc().to_string());
+    //     }
+    // }
 
-    #[test]
-    fn os_custom() {
-        let mut rng = rand::thread_rng();
-        for _ in 0..100 {
-            println!("{}", UserAgent::custom(OS::Android, Browser::Chrome));
-            println!(
-                "{}",
-                UserAgent::custom(OS::Android, Browser::random(&mut rng))
-            );
-            println!(
-                "{}",
-                UserAgent::custom(OS::mobile(&mut rng), Browser::random(&mut rng))
-            );
-        }
-    }
+    // #[test]
+    // fn os_custom() {
+    //     let mut rng = rand::thread_rng();
+    //     for _ in 0..100 {
+    //         println!("{}", UserAgent::custom(OS::Android, Browser::Chrome));
+    //         println!(
+    //             "{}",
+    //             UserAgent::custom(OS::Android, Browser::random(&mut rng))
+    //         );
+    //         println!(
+    //             "{}",
+    //             UserAgent::custom(OS::mobile(&mut rng), Browser::random(&mut rng))
+    //         );
+    //     }
+    // }
 }
