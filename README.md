@@ -3,11 +3,36 @@
 安卓系统版本 使用的中国内地一网站userAgent系统 top n
 
 # Quick Start
-```no run
+```rust
     for _ in 0..100 {
         println!("{}", UserAgent::random().to_string());
     }
 ```
+ ### 手机电脑指定
+ ```rust
+     for _ in 0..100 {
+         println!("Mobile:{}", UserAgent::mobile().to_string());
+         println!("Pc:{}", UserAgent::pc().to_string());
+     }
+ ```
+ ### 完全自定义
+ ```rust
+     let mut rng = rand::thread_rng();
+     for _ in 0..100 {
+         // 指定 Android & Chrome
+         println!("{}", UserAgent::custom(OS::Android, Browser::Chrome));
+         // 指定 Android & 随机浏览器
+         println!(
+             "{}",
+             UserAgent::custom(OS::Android, Browser::random(&mut rng))
+         );
+         // 随机手机系统 & 随机浏览器  === UserAgent::mobile
+         println!(
+             "{}",
+             UserAgent::custom(OS::mobile(&mut rng), Browser::random(&mut rng))
+         );
+     }
+ ```
 
 # Todo
 - [ ] 生成Sec-CH-UA

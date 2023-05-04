@@ -20,8 +20,8 @@ pub enum OS {
     Ios,
 }
 
-impl Distribution<OS> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> OS {
+impl OS {
+    pub fn random<R: Rng + ?Sized>(rng: &mut R) -> Self {
         match rng.gen_range(0..5) {
             0 => OS::Windows,
             1 => OS::Macintosh,
@@ -30,6 +30,28 @@ impl Distribution<OS> for Standard {
             4 => OS::Ios,
             _ => OS::Android,
         }
+    }
+
+    pub fn mobile<R: Rng + ?Sized>(rng: &mut R) -> Self {
+        match rng.gen_range(0..2) {
+            0 => OS::Android,
+            1 => OS::Ios,
+            _ => OS::Android,
+        }
+    }
+    pub fn pc<R: Rng + ?Sized>(rng: &mut R) -> Self {
+        match rng.gen_range(0..3) {
+            0 => OS::Windows,
+            1 => OS::Macintosh,
+            2 => OS::Linux,
+            _ => OS::Windows,
+        }
+    }
+}
+
+impl Distribution<OS> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> OS {
+        OS::random(rng)
     }
 }
 

@@ -9,8 +9,8 @@ pub enum Browser {
     Edge,
 }
 
-impl Distribution<Browser> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Browser {
+impl Browser {
+    pub fn random<R: Rng + ?Sized>(rng: &mut R) -> Self {
         match rng.gen_range(0..120) {
             0..=29 => Browser::Chrome,
             30..=39 => Browser::Opera,
@@ -19,6 +19,12 @@ impl Distribution<Browser> for Standard {
             90..=120 => Browser::Edge,
             _ => Browser::Edge,
         }
+    }
+}
+
+impl Distribution<Browser> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Browser {
+        Browser::random(rng)
     }
 }
 

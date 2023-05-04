@@ -10,6 +10,33 @@
 //!         println!("{}", UserAgent::random().to_string());
 //!     }
 //! ```
+//! ### 手机电脑指定
+//! ```no run
+//!     for _ in 0..100 {
+//!         // 随机手机端agent
+//!         println!("Mobile:{}", UserAgent::mobile().to_string());
+//!         // 随机PC端
+//!         println!("Pc:{}", UserAgent::pc().to_string());
+//!     }
+//! ```
+//! ### 完全自定义
+//! ```no run
+//!     let mut rng = rand::thread_rng();
+//!     for _ in 0..100 {
+//!         // 指定 Android & Chrome
+//!         println!("{}", UserAgent::custom(OS::Android, Browser::Chrome));
+//!         // 指定 Android & 随机浏览器
+//!         println!(
+//!             "{}",
+//!             UserAgent::custom(OS::Android, Browser::random(&mut rng))
+//!         );
+//!         // 随机手机系统 & 随机浏览器  === UserAgent::mobile
+//!         println!(
+//!             "{}",
+//!             UserAgent::custom(OS::mobile(&mut rng), Browser::random(&mut rng))
+//!         );
+//!     }
+//! ```
 //!
 //! # Todo
 //! - [ ] 生成Sec-CH-UA
@@ -20,6 +47,8 @@ mod browser;
 mod os_version;
 
 use std::fmt::Display;
+
+use rand::Rng;
 
 use crate::{browser::Browser, os_version::OS};
 
@@ -69,6 +98,31 @@ impl UserAgent {
             browser: rand::random(),
         }
     }
+
+    pub fn mobile() -> Self {
+        let mut rng = rand::thread_rng();
+        UserAgent {
+            product: Product::Mozilla,
+            os_ver: OS::mobile(&mut rng),
+            browser: rand::random(),
+        }
+    }
+    pub fn pc() -> Self {
+        let mut rng = rand::thread_rng();
+        UserAgent {
+            product: Product::Mozilla,
+            os_ver: OS::pc(&mut rng),
+            browser: rand::random(),
+        }
+    }
+
+    pub fn custom(os_ver: OS, browser: Browser) -> Self {
+        UserAgent {
+            product: Product::Mozilla,
+            os_ver,
+            browser,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -84,5 +138,26 @@ mod tests {
     }
 
     #[test]
-    fn get_OS() {}
+    fn os_check() {
+        for _ in 0..100 {
+            println!("Mobile:{}", UserAgent::mobile().to_string());
+            println!("Pc:{}", UserAgent::pc().to_string());
+        }
+    }
+
+    #[test]
+    fn os_custom() {
+        let mut rng = rand::thread_rng();
+        for _ in 0..100 {
+            println!("{}", UserAgent::custom(OS::Android, Browser::Chrome));
+            println!(
+                "{}",
+                UserAgent::custom(OS::Android, Browser::random(&mut rng))
+            );
+            println!(
+                "{}",
+                UserAgent::custom(OS::mobile(&mut rng), Browser::random(&mut rng))
+            );
+        }
+    }
 }
