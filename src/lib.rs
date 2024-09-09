@@ -1,54 +1,56 @@
-//!  这是一个随机生成UserAgent的程序<初版>。
-//!
-//!  未保证浏览器版本真实存在。不生成现实较少见的Agent
-//!
-//!  安卓系统版本 使用的中国内地一网站userAgent系统 top n
-//!
+//! This is a program that randomly generates UserAgents.
+//! [这是一个随机生成UserAgent的程序]
+//! 数据整理自:
+//! [whatmyuseragent.com](https://whatmyuseragent.com/)
+//! [user-agents.net](https://user-agents.net/)
+//! [useragentstring.com](https://useragentstring.com)
 //! # Quick Start
 //! ```no run
-//!     for _ in 0..100 {
-//!         println!("{}", UserAgent::random().to_string());
-//!     }
+//!    // one
+//!    println!("{}", UserAgent::random().to_string());
+//!    // two
+//!    UserAgent::custom(rand::random(), rand::random());   
 //! ```
-//! ## 手机电脑指定
+//! ## Mobile and computer designated.[手机电脑指定]
 //! ```no run
-//!     for _ in 0..100 {
-//!         // 随机手机端agent
-//!         println!("Mobile:{}", UserAgent::mobile().to_string());
-//!         // 随机PC端
-//!         println!("Pc:{}", UserAgent::pc().to_string());
-//!     }
+//!    // Random mobile agent. [随机手机端agent]
+//!    println!("Mobile:{}", UserAgent::mobile().to_string());
+//!    // Random Desktop agent.随机PC端
+//!    println!("Pc:{}", UserAgent::pc().to_string());
 //! ```
-//! ## 完全自定义
+//! ## Fully customizable.完全自定义
 //! ```no run
-//!     let mut rng = rand::thread_rng();
-//!     for _ in 0..100 {
-//!         // 指定 Android & Chrome
-//!         println!("{}", UserAgent::custom(OS::Android, Browser::Chrome));
-//!         // 指定 Android & 随机浏览器
-//!         println!(
-//!             "{}",
-//!             UserAgent::custom(OS::Android, Browser::random(&mut rng))
-//!         );
-//!         // 随机手机系统 & 随机浏览器  === UserAgent::mobile
-//!         println!(
-//!             "{}",
-//!             UserAgent::custom(OS::mobile(&mut rng), Browser::random(&mut rng))
-//!         );
-//!     }
+//! let mut rng = rand::thread_rng();
+//! println!(
+//!     "custom Mobile Iphone Chrome:{}",
+//!     UserAgent::custom(Devices::Mobile(MobileDevice::Iphone), Browser::Chrome)
+//! );
+//! println!(
+//!     "custom Desktop Windows random browser :{}",
+//!     UserAgent::custom(Devices::Desktop(DesktopDevice::Windows), rand::random())
+//! );
+//! println!(
+//!     "custom random Mobile & random browser :{}",
+//!     UserAgent::custom(Devices::Mobile(rand::random()), Browser::random(&mut rng))
+//! );
+//! //Devices、Browser、DesktopDevice、MobileDevice impl rand::distributions::Standard
+//! let mut rng = rand::thread_rng();
+//! UserAgent::custom(Devices::random(&mut rng), Browser::random(&mut rng));
+//! UserAgent::custom(rand::random(), rand::random());
 //! ```
 //!
 //! # Todo
-//! - [ ] 生成Sec-CH-UA 后期承担 `我是谁`的任务，可能落在他身上了
-//! - [ ] 更多统计信息收集,提取系统版本 和 浏览器真实版本
-//! - [ ] 生成真实世界的概率
+//! - [ ] create Sec-CH-UA
 
 mod browser;
+mod config;
 mod os_version;
 
 use std::fmt::Display;
 
-use crate::{browser::Browser, os_version::OS};
+pub use crate::{
+    browser::Browser, os_version::DesktopDevice, os_version::Devices, os_version::MobileDevice,
+};
 
 /// Agent 惯例..致敬网景
 enum Product {
@@ -74,7 +76,7 @@ impl<'a> Display for Product {
 /// 分为3段 Product && OS && browser
 pub struct UserAgent {
     product: Product,
-    os_ver: OS,
+    os_ver: Devices,
     browser: Browser,
 }
 
@@ -100,23 +102,23 @@ impl UserAgent {
     }
 
     pub fn mobile() -> Self {
-        let mut rng = rand::thread_rng();
+        // let mut rng = rand::thread_rng();
         UserAgent {
             product: Product::Mozilla,
-            os_ver: OS::mobile(&mut rng),
+            os_ver: Devices::Mobile(rand::random()),
             browser: rand::random(),
         }
     }
     pub fn pc() -> Self {
-        let mut rng = rand::thread_rng();
+        // let mut rng = rand::thread_rng();
         UserAgent {
             product: Product::Mozilla,
-            os_ver: OS::pc(&mut rng),
+            os_ver: Devices::Desktop(rand::random()),
             browser: rand::random(),
         }
     }
 
-    pub fn custom(os_ver: OS, browser: Browser) -> Self {
+    pub fn custom(os_ver: Devices, browser: Browser) -> Self {
         UserAgent {
             product: Product::Mozilla,
             os_ver,
@@ -128,35 +130,39 @@ impl UserAgent {
 #[cfg(test)]
 mod tests {
 
-    // use super::*;
-    // #[test]
-    // fn it_works() {
-    //     for _ in 0..100 {
-    //         println!("{}", UserAgent::random().to_string());
-    //     }
-    // }
+    use super::*;
+    #[test]
+    fn it_works() {
+        // for _ in 0..100 {
+        println!("{}", UserAgent::random().to_string());
+        // }
+    }
 
-    // #[test]
-    // fn os_check() {
-    //     for _ in 0..100 {
-    //         println!("Mobile:{}", UserAgent::mobile().to_string());
-    //         println!("Pc:{}", UserAgent::pc().to_string());
-    //     }
-    // }
+    #[test]
+    fn os_check() {
+        // for _ in 0..100 {
+        println!("Mobile:{}", UserAgent::mobile().to_string());
+        println!("Pc:{}", UserAgent::pc().to_string());
+        // }
+    }
 
-    // #[test]
-    // fn os_custom() {
-    //     let mut rng = rand::thread_rng();
-    //     for _ in 0..100 {
-    //         println!("{}", UserAgent::custom(OS::Android, Browser::Chrome));
-    //         println!(
-    //             "{}",
-    //             UserAgent::custom(OS::Android, Browser::random(&mut rng))
-    //         );
-    //         println!(
-    //             "{}",
-    //             UserAgent::custom(OS::mobile(&mut rng), Browser::random(&mut rng))
-    //         );
-    //     }
-    // }
+    #[test]
+    fn os_custom() {
+        let mut rng = rand::thread_rng();
+        println!(
+            "custom Mobile Iphone Chrome:{}",
+            UserAgent::custom(Devices::Mobile(MobileDevice::Iphone), Browser::Chrome)
+        );
+        println!(
+            "custom Desktop Windows random browser :{}",
+            UserAgent::custom(Devices::Desktop(DesktopDevice::Windows), rand::random())
+        );
+        println!(
+            "custom random Mobile & random browser :{}",
+            UserAgent::custom(Devices::Mobile(rand::random()), Browser::random(&mut rng))
+        );
+        let mut rng = rand::thread_rng();
+        UserAgent::custom(Devices::random(&mut rng), Browser::random(&mut rng));
+        UserAgent::custom(rand::random(), Browser::random(&mut rng));
+    }
 }

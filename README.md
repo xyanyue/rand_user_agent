@@ -1,40 +1,42 @@
-这是一个随机生成UserAgent的程序<初版>。
-未保证浏览器版本真实存在。不生成现实较少见的Agent
-安卓系统版本 使用的中国内地一网站userAgent系统 top n
+This is a program that randomly generates UserAgents.
 
+这是一个随机生成UserAgent的程序
+
+## Data From . 数据整理自
+[whatmyuseragent.com](https://whatmyuseragent.com/)
+
+[user-agents.net](https://user-agents.net/)
+
+[useragentstring.com](https://useragentstring.com)
 # Quick Start
 ```rust
-    for _ in 0..100 {
-        println!("{}", UserAgent::random().to_string());
-    }
+println!("{}", UserAgent::random().to_string());
 ```
- ### 手机电脑指定
- ```rust
-     for _ in 0..100 {
-         println!("Mobile:{}", UserAgent::mobile().to_string());
-         println!("Pc:{}", UserAgent::pc().to_string());
-     }
- ```
- ### 完全自定义
- ```rust
-     let mut rng = rand::thread_rng();
-     for _ in 0..100 {
-         // 指定 Android & Chrome
-         println!("{}", UserAgent::custom(OS::Android, Browser::Chrome));
-         // 指定 Android & 随机浏览器
-         println!(
-             "{}",
-             UserAgent::custom(OS::Android, Browser::random(&mut rng))
-         );
-         // 随机手机系统 & 随机浏览器  === UserAgent::mobile
-         println!(
-             "{}",
-             UserAgent::custom(OS::mobile(&mut rng), Browser::random(&mut rng))
-         );
-     }
- ```
-
+## Mobile and computer designated.手机电脑指定
+```rust
+// Random mobile agent. [随机手机端agent]
+println!("Mobile:{}", UserAgent::mobile().to_string());
+// Random Desktop agent.随机PC端
+println!("Pc:{}", UserAgent::pc().to_string());
+```
+## Fully customizable.完全自定义
+> `Browser`、`Devices`、`DesktopDevice`、`MobileDevice` impl rand::distributions::Standard
+```rust
+println!(
+    "custom Mobile Iphone Chrome:{}",
+    UserAgent::custom(Devices::Mobile(MobileDevice::Iphone), Browser::Chrome)
+);
+//first
+println!(
+    "custom Desktop Windows random browser :{}",
+    UserAgent::custom(Devices::Desktop(DesktopDevice::Windows), rand::random())
+);
+//two
+let mut rng = rand::thread_rng();
+println!(
+    "custom random Mobile & random browser :{}",
+    UserAgent::custom(Devices::Mobile(rand::random()), Browser::random(&mut rng))
+);
+```
 # Todo
-- [ ] 生成Sec-CH-UA
-- [ ] 更多统计信息收集,提取系统版本 和 浏览器真实版本
-- [ ] 生成真实世界的概率
+- [ ] create Sec-CH-UA
