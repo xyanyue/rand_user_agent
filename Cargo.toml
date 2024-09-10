@@ -6,7 +6,7 @@ keywords = ["agent", "useragent", "user_agent"]
 license = "BSD-3-Clause"
 name = "rand_user_agent"
 repository = "https://github.com/xyanyue/rand_user_agent.git"
-version = "0.2.0"
+version = "0.2.1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

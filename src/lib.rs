@@ -73,7 +73,16 @@ impl<'a> Display for Product {
     }
 }
 /// 用户代理生成
-/// 分为3段 Product && OS && browser
+///
+/// 分为3段[Divided into 3 sections] Product && Devices && browser
+///
+/// Product default is Mozilla,only Mozilla,Other unsupported,Not common
+///
+/// Devices 暂时支持 Desktop & Mobile
+///
+/// DesktopDevices:(Windows,Linux,MacOS)
+///
+/// MobileDevices:(Galaxy,Huawei,HarmonyOS,Iphone...)
 pub struct UserAgent {
     product: Product,
     os_ver: Devices,
@@ -93,6 +102,7 @@ impl Display for UserAgent {
 }
 
 impl UserAgent {
+    /// 随机生成Agent.Random agent
     pub fn random() -> Self {
         UserAgent {
             product: Product::Mozilla,
@@ -100,7 +110,7 @@ impl UserAgent {
             browser: rand::random(),
         }
     }
-
+    /// 随机生成 手机端agent . Randomly generate mobile agent
     pub fn mobile() -> Self {
         // let mut rng = rand::thread_rng();
         UserAgent {
@@ -109,6 +119,7 @@ impl UserAgent {
             browser: rand::random(),
         }
     }
+    /// Randomly generate desktop agent
     pub fn pc() -> Self {
         // let mut rng = rand::thread_rng();
         UserAgent {
@@ -117,7 +128,18 @@ impl UserAgent {
             browser: rand::random(),
         }
     }
-
+    /// 自定义 custom
+    ///
+    /// ```rust
+    /// UserAgent::custom(Devices::Mobile(MobileDevice::Iphone), Browser::Chrome)
+    ///
+    /// UserAgent::custom(Devices::Mobile(MobileDevice::Iphone), rand::random())
+    ///
+    /// UserAgent::custom(Devices::Desktop(DesktopDevice::Windows), rand::random())
+    ///
+    /// UserAgent::custom(rand::random(), Browser::Chrome)
+    ///
+    /// ```
     pub fn custom(os_ver: Devices, browser: Browser) -> Self {
         UserAgent {
             product: Product::Mozilla,
@@ -156,6 +178,10 @@ mod tests {
         println!(
             "custom Desktop Windows random browser :{}",
             UserAgent::custom(Devices::Desktop(DesktopDevice::Windows), rand::random())
+        );
+        println!(
+            "custom random Mobile & random browser :{}",
+            UserAgent::custom(Devices::Mobile(rand::random()), Browser::random(&mut rng))
         );
         println!(
             "custom random Mobile & random browser :{}",

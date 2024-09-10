@@ -3,7 +3,7 @@ use std::fmt::Display;
 
 use crate::config::{APPLE_WEB_KIT, CHROME, EDGE, FIREFOX, OPERA, SAFARI};
 
-// from https://useragentstring.com/pages/Firefox/
+/// IEnternetExplorer I won't support it
 pub enum Browser {
     Chrome,
     Opera,
@@ -14,6 +14,8 @@ pub enum Browser {
 }
 
 impl Browser {
+    /// Chrome、Firefox、Safari、Edge 概率[probability] 30
+    /// Opera 概率[probability] 10
     pub fn random<R: Rng + ?Sized>(rng: &mut R) -> Self {
         match rng.gen_range(0..120) {
             0..=29 => Browser::Chrome,
@@ -42,9 +44,18 @@ impl Display for Browser {
                 APPLE_WEB_KIT[0],
                 CHROME[rng.gen_range(0..CHROME.len())],
             ),
-            Browser::Opera => write!(f, "{}", OPERA[rng.gen_range(0..OPERA.len())]),
+            Browser::Opera => write!(
+                f,
+                "{} {}",
+                APPLE_WEB_KIT[0],
+                OPERA[rng.gen_range(0..OPERA.len())]
+            ),
             Browser::Firefox => {
-                write!(f, "{}", FIREFOX[rng.gen_range(0..FIREFOX.len())])
+                write!(
+                    f,
+                    "Gecko/20100101 {}",
+                    FIREFOX[rng.gen_range(0..FIREFOX.len())]
+                )
             }
             Browser::Safari => write!(
                 f,

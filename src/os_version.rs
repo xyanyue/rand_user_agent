@@ -1,7 +1,8 @@
 use std::fmt::Display;
 
 use crate::config::{
-    ANDROID_VER, GALAXY, HARMONYOS, HUAWEI, IPHONE, LINUX_VER, MACINTOSH_VER, WIN_BIT, WIN_NT,
+    ANDROID_VER, GALAXY, HARMONYOS, HUAWEI, IPHONE, LINUX_VER, MACINTOSH_VER, REDMI, WIN_BIT,
+    WIN_NT, XIAOMI,
 };
 use rand::{distributions::Standard, prelude::Distribution, Rng};
 pub enum Devices {
@@ -47,8 +48,8 @@ pub enum MobileDevice {
     HarmonyOS,
     Iphone,
     // One,
-    // Redmi,
-    // Mi,
+    Redmi,
+    Mi,
     // Lumia,
     // Moto,
     // Nova,
@@ -56,12 +57,14 @@ pub enum MobileDevice {
 }
 impl MobileDevice {
     pub fn random<R: Rng + ?Sized>(rng: &mut R) -> Self {
-        match rng.gen_range(0..4) {
+        match rng.gen_range(0..6) {
             0 => MobileDevice::Galaxy,
             1 => MobileDevice::Huawei,
             2 => MobileDevice::HarmonyOS,
             3 => MobileDevice::Iphone,
-            _ => MobileDevice::Iphone, // no
+            4 => MobileDevice::Mi,
+            5 => MobileDevice::Redmi,
+            _ => MobileDevice::Galaxy, // no
         }
     }
 }
@@ -96,6 +99,20 @@ impl Display for MobileDevice {
                     IPHONE[rng.gen_range(0..IPHONE.len())]
                 )
             }
+            MobileDevice::Mi => {
+                write!(
+                    f,
+                    "(Linux; Android {}; {})",
+                    ANDROID_VER[rng.gen_range(0..ANDROID_VER.len())],
+                    XIAOMI[rng.gen_range(0..XIAOMI.len())]
+                )
+            }
+            MobileDevice::Redmi => write!(
+                f,
+                "(Linux; Android {}; {})",
+                ANDROID_VER[rng.gen_range(0..ANDROID_VER.len())],
+                REDMI[rng.gen_range(0..REDMI.len())]
+            ),
         }
     }
 }
